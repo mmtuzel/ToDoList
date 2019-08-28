@@ -1,6 +1,7 @@
 package com.murat.todolist.ui.taskDetail;
 
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -13,10 +14,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
+import android.widget.Toast;
 
 import com.murat.todolist.R;
 import com.murat.todolist.data.model.Task;
 import com.murat.todolist.databinding.FragmentTaskDetailBinding;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,6 +33,7 @@ public class TaskDetailFragment extends Fragment {
     private static final String ARG_TASK_ID = "taskId";
 
     private FragmentTaskDetailBinding binding;
+    private TaskDetailViewModel taskDetailViewModel;
 
     public static TaskDetailFragment newInstance(int taskId) {
 
@@ -54,7 +62,7 @@ public class TaskDetailFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        TaskDetailViewModel taskDetailViewModel = ViewModelProviders.of(
+        taskDetailViewModel = ViewModelProviders.of(
                 this,
                 new TaskDetailViewModelFactory(
                         getActivity().getApplication(),
@@ -64,14 +72,32 @@ public class TaskDetailFragment extends Fragment {
         binding.setLifecycleOwner(this);
         binding.setViewModel(taskDetailViewModel);
         subscribeToViewModel(taskDetailViewModel);
+
+        binding.ivDeadlineDate.setOnClickListener(v -> {
+            Calendar calendar = Calendar.getInstance();
+            DatePickerDialog datePickerDialog = new DatePickerDialog(
+                    getActivity(),
+                    dateSetListener,
+                    calendar.get(Calendar.YEAR),
+                    calendar.get(Calendar.MONTH),
+                    calendar.get(Calendar.DAY_OF_MONTH)
+            );
+            datePickerDialog.show();
+        });
     }
 
     private void subscribeToViewModel(TaskDetailViewModel viewModel) {
         viewModel.getTask().observe(this, task -> {
-            Log.d(TAG, "edit title: " + task.getTitle());
-            Log.d(TAG, "edit description: " + task.getDescription());
             viewModel.onTaskLoaded(task);
-            //viewModel.setEditedTask(task);
         });
     }
+
+    private DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+            Calendar calendar = new GregorianCalendar(year, month, dayOfMonth);
+            Date date = new Date(calendar.getTimeInMillis());
+            taskDetailViewModel.taskDeadlineDate.setValue(date);
+        }
+    };
 }

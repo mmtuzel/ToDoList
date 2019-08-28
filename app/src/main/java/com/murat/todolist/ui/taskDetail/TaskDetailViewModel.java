@@ -12,6 +12,8 @@ import androidx.lifecycle.MutableLiveData;
 import com.murat.todolist.data.TaskRepository;
 import com.murat.todolist.data.model.Task;
 
+import java.util.Date;
+
 public class TaskDetailViewModel extends AndroidViewModel {
     private static final String TAG = "TaskDetailViewModel";
     private TaskRepository repository;
@@ -21,11 +23,13 @@ public class TaskDetailViewModel extends AndroidViewModel {
     //public ObservableField<Task> editedTask = new ObservableField<>();
     public MutableLiveData<String> taskTitle = new MutableLiveData<>();
     public MutableLiveData<String> taskDescription = new MutableLiveData<>();
+    public MutableLiveData<Date> taskDeadlineDate = new MutableLiveData<>();
 
     public TaskDetailViewModel(@NonNull Application application, int taskId) {
         super(application);
         repository = new TaskRepository(application);
         task = repository.getTask(taskId);
+        taskDeadlineDate.setValue(null);
     }
 
     public LiveData<Task> getTask() {
@@ -38,6 +42,7 @@ public class TaskDetailViewModel extends AndroidViewModel {
         Log.d(TAG, "onTaskLoaded description: " + task.getDescription());
         taskTitle.setValue(task.getTitle());
         taskDescription.setValue(task.getDescription());
+        taskDeadlineDate.setValue(task.getDeadline());
         Log.d(TAG, "after title: " + taskTitle.getValue());
         Log.d(TAG, "after desc: " + taskDescription.getValue());
     }
@@ -46,6 +51,7 @@ public class TaskDetailViewModel extends AndroidViewModel {
         //Task task = getEditedTask();
         editableTask.setTitle(taskTitle.getValue());
         editableTask.setDescription(taskDescription.getValue());
+        editableTask.setDeadline(taskDeadlineDate.getValue());
         Log.d(TAG, "updateTask title: " + editableTask.getTitle());
         Log.d(TAG, "updateTask desc: " + editableTask.getDescription());
         repository.updateTask(editableTask);

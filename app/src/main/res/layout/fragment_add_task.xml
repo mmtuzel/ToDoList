@@ -89,7 +89,8 @@
             android:layout_margin="16dp"
             android:onClick="@{() -> viewModel.createTask()}"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:srcCompat="@drawable/ic_complete"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
