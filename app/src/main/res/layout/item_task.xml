@@ -99,6 +99,7 @@
                 app:srcCompat="@drawable/ic_task_delete"/>
 
             <CheckBox
+                android:visibility="gone"
                 android:id="@+id/check_box"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

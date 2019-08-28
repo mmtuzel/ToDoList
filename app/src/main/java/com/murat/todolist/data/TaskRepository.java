@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData;
 
 import com.murat.todolist.data.TaskDao;
 import com.murat.todolist.data.TaskDatabase;
+import com.murat.todolist.data.model.Status;
 import com.murat.todolist.data.model.Task;
 
 import java.util.List;
@@ -26,6 +27,42 @@ public class TaskRepository {
 
     public LiveData<List<Task>> getTasks() {
         return tasks;
+    }
+
+    public LiveData<List<Task>> getTasksByStatus(Status status) {
+        return taskDao.getTasksByStatus(status);
+    }
+
+    public LiveData<List<Task>> getTasksByNameASC() {
+        return taskDao.getTasksByNameASC();
+    }
+
+    public LiveData<List<Task>> getTasksByNameDESC() {
+        return taskDao.getTasksByNameDESC();
+    }
+
+    public LiveData<List<Task>> getTaskByCreateDateASC() {
+        return taskDao.getTasksByCreateDateASC();
+    }
+
+    public LiveData<List<Task>> getTaskByCreateDateDESC() {
+        return taskDao.getTasksByCreateDateDESC();
+    }
+
+    public LiveData<List<Task>> getTaskByDeadlineDateASC() {
+        return taskDao.getTasksByDeadlineDateASC();
+    }
+
+    public LiveData<List<Task>> getTaskByDeadlineDateDESC() {
+        return taskDao.getTasksByDeadlineDateDESC();
+    }
+
+    public LiveData<List<Task>> getTasksByStatusOrderASC() {
+        return taskDao.getTasksByStatusOrderASC();
+    }
+
+    public LiveData<List<Task>> getTasksByStatusOrderDESC() {
+        return taskDao.getTasksByStatusOrderDESC();
     }
 
     public void insertTask(Task task) {

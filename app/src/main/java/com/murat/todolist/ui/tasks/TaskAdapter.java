@@ -3,31 +3,37 @@ package com.murat.todolist.ui.tasks;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.murat.todolist.R;
 import com.murat.todolist.data.model.Task;
 import com.murat.todolist.databinding.ItemTaskBinding;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder> {
+public class TaskAdapter extends ListAdapter<Task, TaskAdapter.TaskViewHolder> implements Filterable {
 
     private List<Task> tasks;
     private TaskClickCallback clickCallback;
 
-    public TaskAdapter(TaskClickCallback clickCallback) {
+    protected TaskAdapter(@NonNull DiffUtil.ItemCallback<Task> diffCallback, TaskClickCallback clickCallback) {
+        super(diffCallback);
         this.clickCallback = clickCallback;
     }
 
+
     public void setTasks(List<Task> tasks) {
         this.tasks = tasks;
-        notifyDataSetChanged();
     }
 
     @NonNull
@@ -47,9 +53,35 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
     }
 
     @Override
-    public int getItemCount() {
-        return tasks == null ? 0 : tasks.size();
+    public Filter getFilter() {
+        return taskFilterByName;
     }
+
+    private Filter taskFilterByName = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<Task> filteredTasks = new ArrayList<>();
+            if (constraint == null || constraint.length() == 0) {
+                filteredTasks.addAll(tasks);
+            } else {
+                String filterPattern = constraint.toString().toLowerCase().trim();
+                for (Task task : tasks) {
+                    if (task.getTitle().toLowerCase().contains(filterPattern)) {
+                        filteredTasks.add(task);
+                    }
+                }
+            }
+            FilterResults results = new FilterResults();
+            results.values = filteredTasks;
+
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            submitList((List) results.values);
+        }
+    };
 
     class TaskViewHolder extends RecyclerView.ViewHolder {
         public ItemTaskBinding binding;

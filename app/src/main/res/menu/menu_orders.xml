@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/order_name_asc"
+        android:title="Order By Name ASC"/>
+    <item
+        android:id="@+id/order_name_desc"
+        android:title="Order By Name DESC"/>
+
+    <item
+        android:id="@+id/order_create_date_asc"
+        android:title="Order By Create Date ASC"/>
+
+    <item
+        android:id="@+id/order_create_date_desc"
+        android:title="Order By Create Date DESC"/>
+
+    <item
+        android:id="@+id/order_deadline_date_asc"
+        android:title="Order By Deadline Date ASC"/>
+
+    <item
+        android:id="@+id/order_deadline_date_desc"
+        android:title="Order By Deadline Date DESC"/>
+
+    <item
+        android:id="@+id/order_status_asc"
+        android:title="Order By Status ASC"/>
+
+    <item
+        android:id="@+id/order_status_desc"
+        android:title="Order By Status DESC"/>
+
+</menu>

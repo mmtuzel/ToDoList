@@ -5,6 +5,7 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import java.util.Date;
+import java.util.Objects;
 
 @Entity(tableName = "tasks")
 public class Task {
@@ -86,5 +87,23 @@ public class Task {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Task task = (Task) o;
+        return id == task.id &&
+                title.equals(task.title) &&
+                description.equals(task.description) &&
+                createdAt.equals(task.createdAt) &&
+                deadline.equals(task.deadline) &&
+                status == task.status;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, description, createdAt, deadline, status);
     }
 }
