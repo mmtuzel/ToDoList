@@ -81,6 +81,10 @@ public class TaskRepository {
         return taskDao.getTask(id);
     }
 
+    public void updateTaskStatus(Task task, Status status) {
+        new UpdateTodoTaskStatus(taskDao, status).execute(task);
+    }
+
     private static class InsertTodoTask extends AsyncTask<Task, Void, Void> {
         private TaskDao taskDao;
 
@@ -119,6 +123,22 @@ public class TaskRepository {
         @Override
         protected Void doInBackground(Task... tasks) {
             taskDao.deleteTask(tasks[0]);
+            return null;
+        }
+    }
+
+    private static class UpdateTodoTaskStatus extends AsyncTask<Task, Void, Void> {
+        private TaskDao taskDao;
+        private com.murat.todolist.data.model.Status status;
+
+        UpdateTodoTaskStatus(TaskDao taskDao, com.murat.todolist.data.model.Status status) {
+            this.taskDao = taskDao;
+            this.status = status;
+        }
+
+        @Override
+        protected Void doInBackground(Task... tasks) {
+            taskDao.updateTaskStatus(tasks[0].getId(), status);
             return null;
         }
     }

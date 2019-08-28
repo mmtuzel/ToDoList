@@ -60,4 +60,7 @@ public interface TaskDao {
     @Query("DELETE FROM tasks WHERE id = :id")
     void deleteTaskWithId(int id);
 
+    @Query("UPDATE tasks SET status = :status WHERE id = :id")
+    void updateTaskStatus(int id, Status status);
+
 }
