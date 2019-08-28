@@ -1,6 +1,7 @@
 package com.murat.todolist.ui.tasks;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.arch.core.util.Function;
@@ -57,13 +58,24 @@ public class TaskViewModel extends AndroidViewModel {
         repository.deleteTask(task);
     }
 
-    public void completeTask(Task task) {
-        if (task.getStatus() == Status.ACTIVE) {
+    public void updateTaskStatus(Task task) {
+        /*if (task.getStatus() == Status.ACTIVE) {
             task.setStatus(Status.COMPLETED);
         } else if (task.getStatus() == Status.COMPLETED) {
             task.setStatus(Status.ACTIVE);
-        }
+        }*/
         repository.updateTask(task);
+        Log.d("TaskViewModel", "task updated");
+    }
+
+    public void completeTask(Task task) {
+        //task.setStatus(Status.COMPLETED);
+        repository.updateTaskStatus(task, Status.COMPLETED);
+    }
+
+    public void activateTask(Task task) {
+        //task.setStatus(Status.ACTIVE);
+        repository.updateTaskStatus(task, Status.ACTIVE);
     }
 
     public LiveData<List<Task>> getTasks() {

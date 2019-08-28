@@ -1,5 +1,6 @@
 package com.murat.todolist.ui.tasks;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,7 +49,7 @@ public class TaskAdapter extends ListAdapter<Task, TaskAdapter.TaskViewHolder> i
 
     @Override
     public void onBindViewHolder(@NonNull TaskViewHolder holder, int position) {
-        holder.binding.setTask(tasks.get(position));
+        holder.binding.setTask(getItem(position));
         holder.binding.setClickCallback(clickCallback);
     }
 

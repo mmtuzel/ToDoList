@@ -19,7 +19,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupMenu;
+import android.widget.Toast;
 
+import com.murat.todolist.data.model.Status;
 import com.murat.todolist.ui.MainActivity;
 import com.murat.todolist.R;
 import com.murat.todolist.data.model.Task;
@@ -94,6 +96,7 @@ public class TasksFragment extends Fragment {
     }
 
     private void subscribeTasks(LiveData<List<Task>> liveData) {
+        liveData.removeObservers(this); // workaround for improper navigation and fragment handling. will be fixed.
         liveData.observe(this, tasks -> {
             Log.d(TAG, "tasks size: " + tasks.size());
             taskAdapter.submitList(tasks);
@@ -187,8 +190,12 @@ public class TasksFragment extends Fragment {
         }
 
         @Override
-        public void onTaskCompleteClick(Task task) {
-            taskViewModel.completeTask(task);
+        public void onTaskStatusChangeClick(Task task) {
+            if (task.getStatus() == Status.ACTIVE) {
+                taskViewModel.completeTask(task);
+            } else if (task.getStatus() == Status.COMPLETED) {
+                taskViewModel.activateTask(task);
+            }
         }
     };
 
