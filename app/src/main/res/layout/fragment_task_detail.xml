@@ -54,6 +54,15 @@
             app:layout_constraintBottom_toTopOf="@id/iv_deadline_date"
             tools:text="@tools:sample/date/mmddyy"/>
 
+        <ImageView
+            android:id="@+id/iv_share"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_share"
+            app:layout_constraintEnd_toEndOf="@id/guideline_end"
+            app:layout_constraintBottom_toTopOf="@+id/et_title"
+            app:layout_constraintTop_toTopOf="parent"/>
+
         <EditText
             android:id="@+id/et_title"
             android:layout_width="0dp"

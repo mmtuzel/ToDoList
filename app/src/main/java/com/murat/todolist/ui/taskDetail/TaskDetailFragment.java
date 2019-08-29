@@ -2,6 +2,8 @@ package com.murat.todolist.ui.taskDetail;
 
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -84,12 +86,27 @@ public class TaskDetailFragment extends Fragment {
             );
             datePickerDialog.show();
         });
+
+        binding.ivShare.setOnClickListener(v -> shareTaskViaEmail());
     }
 
     private void subscribeToViewModel(TaskDetailViewModel viewModel) {
         viewModel.getTask().observe(this, task -> {
             viewModel.onTaskLoaded(task);
         });
+    }
+
+    private void shareTaskViaEmail() {
+        String title = taskDetailViewModel.taskTitle.getValue();
+        String description = taskDetailViewModel.taskDescription.getValue();
+
+        Intent intent = new Intent(Intent.ACTION_SENDTO);
+        intent.setData(Uri.parse("mailto:"));
+        intent.putExtra(Intent.EXTRA_SUBJECT, title);
+        intent.putExtra(Intent.EXTRA_TEXT, description);
+        if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+            getActivity().startActivity(intent);
+        }
     }
 
     private DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
