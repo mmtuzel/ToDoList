@@ -1,4 +1,4 @@
-package com.murat.todolist.data.model;
+package com.murat.todolist.data.entity;
 
 import androidx.room.Entity;
 import androidx.room.Ignore;

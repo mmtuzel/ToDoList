@@ -1,13 +1,9 @@
 package com.murat.todolist.ui.tasks;
 
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
@@ -16,7 +12,7 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.murat.todolist.R;
-import com.murat.todolist.data.model.Task;
+import com.murat.todolist.data.entity.Task;
 import com.murat.todolist.databinding.ItemTaskBinding;
 
 import java.util.ArrayList;

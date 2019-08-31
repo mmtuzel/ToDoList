@@ -6,9 +6,9 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
-import com.murat.todolist.data.TaskRepository;
-import com.murat.todolist.data.model.Status;
-import com.murat.todolist.data.model.Task;
+import com.murat.todolist.data.repository.TaskRepository;
+import com.murat.todolist.data.entity.Status;
+import com.murat.todolist.data.entity.Task;
 
 import java.util.Date;
 

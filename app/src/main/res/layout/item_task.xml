@@ -7,7 +7,7 @@
     <data>
         <variable
             name="task"
-            type="com.murat.todolist.data.model.Task" />
+            type="com.murat.todolist.data.entity.Task" />
         <variable
             name="clickCallback"
             type="com.murat.todolist.ui.tasks.TaskClickCallback" />

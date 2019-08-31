@@ -4,15 +4,14 @@ import android.app.Application;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.arch.core.util.Function;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 
-import com.murat.todolist.data.model.Status;
-import com.murat.todolist.data.model.Task;
-import com.murat.todolist.data.TaskRepository;
+import com.murat.todolist.data.entity.Status;
+import com.murat.todolist.data.entity.Task;
+import com.murat.todolist.data.repository.TaskRepository;
 
 import java.util.List;
 

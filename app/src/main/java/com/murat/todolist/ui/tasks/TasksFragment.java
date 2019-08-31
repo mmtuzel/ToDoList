@@ -19,12 +19,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupMenu;
-import android.widget.Toast;
 
-import com.murat.todolist.data.model.Status;
+import com.murat.todolist.data.entity.Status;
 import com.murat.todolist.ui.MainActivity;
 import com.murat.todolist.R;
-import com.murat.todolist.data.model.Task;
+import com.murat.todolist.data.entity.Task;
 import com.murat.todolist.databinding.FragmentTasksBinding;
 
 import java.util.List;

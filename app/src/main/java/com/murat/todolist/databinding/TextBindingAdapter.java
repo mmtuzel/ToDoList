@@ -4,7 +4,7 @@ import android.widget.TextView;
 
 import androidx.databinding.BindingAdapter;
 
-import com.murat.todolist.data.model.Status;
+import com.murat.todolist.data.entity.Status;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

@@ -1,4 +1,4 @@
-package com.murat.todolist.data.model;
+package com.murat.todolist.data.entity;
 
 public enum Status {
     ACTIVE(0),

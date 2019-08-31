@@ -5,7 +5,7 @@ import android.widget.ImageView;
 import androidx.databinding.BindingAdapter;
 
 import com.murat.todolist.R;
-import com.murat.todolist.data.model.Status;
+import com.murat.todolist.data.entity.Status;
 
 public class ImageBindingAdapter {
 

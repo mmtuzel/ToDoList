@@ -4,13 +4,12 @@ import android.app.Application;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.databinding.ObservableField;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.murat.todolist.data.TaskRepository;
-import com.murat.todolist.data.model.Task;
+import com.murat.todolist.data.repository.TaskRepository;
+import com.murat.todolist.data.entity.Task;
 
 import java.util.Date;
 

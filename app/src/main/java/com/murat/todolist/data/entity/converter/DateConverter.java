@@ -1,4 +1,4 @@
-package com.murat.todolist.data.model.converter;
+package com.murat.todolist.data.entity.converter;
 
 import androidx.room.TypeConverter;
 

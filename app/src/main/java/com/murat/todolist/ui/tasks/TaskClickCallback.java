@@ -1,6 +1,6 @@
 package com.murat.todolist.ui.tasks;
 
-import com.murat.todolist.data.model.Task;
+import com.murat.todolist.data.entity.Task;
 
 public interface TaskClickCallback {
     void onTaskClick(Task task);

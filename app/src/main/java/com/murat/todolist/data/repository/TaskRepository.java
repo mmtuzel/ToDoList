@@ -1,14 +1,14 @@
-package com.murat.todolist.data;
+package com.murat.todolist.data.repository;
 
 import android.app.Application;
 import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 
-import com.murat.todolist.data.TaskDao;
-import com.murat.todolist.data.TaskDatabase;
-import com.murat.todolist.data.model.Status;
-import com.murat.todolist.data.model.Task;
+import com.murat.todolist.data.ToDoDatabase;
+import com.murat.todolist.data.dao.TaskDao;
+import com.murat.todolist.data.entity.Status;
+import com.murat.todolist.data.entity.Task;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ public class TaskRepository {
     private LiveData<List<Task>> tasks;
 
     public TaskRepository(Application application) {
-        TaskDatabase database = TaskDatabase.getDatabase(application);
+        ToDoDatabase database = ToDoDatabase.getDatabase(application);
         taskDao = database.taskDao();
         tasks = taskDao.getTasks();
     }
@@ -129,9 +129,9 @@ public class TaskRepository {
 
     private static class UpdateTodoTaskStatus extends AsyncTask<Task, Void, Void> {
         private TaskDao taskDao;
-        private com.murat.todolist.data.model.Status status;
+        private com.murat.todolist.data.entity.Status status;
 
-        UpdateTodoTaskStatus(TaskDao taskDao, com.murat.todolist.data.model.Status status) {
+        UpdateTodoTaskStatus(TaskDao taskDao, com.murat.todolist.data.entity.Status status) {
             this.taskDao = taskDao;
             this.status = status;
         }

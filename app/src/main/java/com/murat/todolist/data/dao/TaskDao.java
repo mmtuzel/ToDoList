@@ -1,4 +1,4 @@
-package com.murat.todolist.data;
+package com.murat.todolist.data.dao;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
@@ -7,8 +7,8 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.murat.todolist.data.model.Status;
-import com.murat.todolist.data.model.Task;
+import com.murat.todolist.data.entity.Status;
+import com.murat.todolist.data.entity.Task;
 
 import java.util.List;
 

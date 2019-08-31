@@ -1,8 +1,8 @@
-package com.murat.todolist.data.model.converter;
+package com.murat.todolist.data.entity.converter;
 
 import androidx.room.TypeConverter;
 
-import com.murat.todolist.data.model.Status;
+import com.murat.todolist.data.entity.Status;
 
 public class StatusConverter {
 

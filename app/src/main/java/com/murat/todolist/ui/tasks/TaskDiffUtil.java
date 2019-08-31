@@ -3,7 +3,7 @@ package com.murat.todolist.ui.tasks;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 
-import com.murat.todolist.data.model.Task;
+import com.murat.todolist.data.entity.Task;
 
 public class TaskDiffUtil extends DiffUtil.ItemCallback<Task> {
     @Override
