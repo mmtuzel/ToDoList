@@ -8,17 +8,20 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
 import com.murat.todolist.data.dao.TaskDao;
+import com.murat.todolist.data.dao.UserDao;
 import com.murat.todolist.data.entity.Task;
+import com.murat.todolist.data.entity.User;
 import com.murat.todolist.data.entity.converter.DateConverter;
 import com.murat.todolist.data.entity.converter.StatusConverter;
 
-@Database(entities = {Task.class}, version = 1, exportSchema = false)
+@Database(entities = {Task.class, User.class}, version = 2, exportSchema = false)
 @TypeConverters({DateConverter.class, StatusConverter.class})
 public abstract class ToDoDatabase extends RoomDatabase {
 
     private static ToDoDatabase INSTANCE;
 
     public abstract TaskDao taskDao();
+    public abstract UserDao userDao();
 
     public static ToDoDatabase getDatabase(Context context) {
         if (INSTANCE == null) {
