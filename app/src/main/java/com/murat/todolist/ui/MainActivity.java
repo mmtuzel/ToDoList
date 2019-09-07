@@ -7,12 +7,15 @@ import androidx.fragment.app.FragmentTransaction;
 import android.os.Bundle;
 
 import com.murat.todolist.R;
+import com.murat.todolist.ToDoApplication;
 import com.murat.todolist.databinding.ActivityMainBinding;
 import com.murat.todolist.ui.addTask.AddTaskFragment;
+import com.murat.todolist.ui.addToDo.AddToDoFragment;
 import com.murat.todolist.ui.login.LoginFragment;
 import com.murat.todolist.ui.register.RegistrationFragment;
 import com.murat.todolist.ui.taskDetail.TaskDetailFragment;
 import com.murat.todolist.ui.tasks.TasksFragment;
+import com.murat.todolist.ui.toDoList.ToDoListFragment;
 import com.murat.todolist.util.Constant;
 import com.murat.todolist.util.SharedPrefsHelper;
 
@@ -25,17 +28,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
-        SharedPrefsHelper sharedPrefsHelper = new SharedPrefsHelper(this);
+        SharedPrefsHelper sharedPrefsHelper = ((ToDoApplication) getApplication()).getSharedPrefs();
         if (sharedPrefsHelper.getPref(Constant.USER_ID) != null) {
-            navigateToTaskFragment();
+            navigateToToDoListFragment();
         } else {
             navigateToRegistrationFragment();
         }
     }
 
     // TODO will fix fragment transaction with Navigation Component
-    public void navigateToTaskFragment() {
-        TasksFragment tasksFragment = new TasksFragment();
+    public void navigateToTasksFragment(int toDoId) {
+        TasksFragment tasksFragment = TasksFragment.newInstance(toDoId);
 
         FragmentTransaction transaction =
                 getSupportFragmentManager()
@@ -45,8 +48,9 @@ public class MainActivity extends AppCompatActivity {
         transaction.commit();
     }
 
-    public void navigateToAddTaskFragment() {
-        AddTaskFragment addTaskFragment = new AddTaskFragment();
+    public void navigateToAddTaskFragment(int toDoId) {
+        //AddTaskFragment addTaskFragment = new AddTaskFragment();
+        AddTaskFragment addTaskFragment = AddTaskFragment.newInstance(toDoId);
 
         FragmentTransaction transaction =
                 getSupportFragmentManager()
@@ -76,7 +80,6 @@ public class MainActivity extends AppCompatActivity {
                         .replace(binding.fragmentContainer.getId(), loginFragment)
                         .addToBackStack(null);
         transaction.commit();
-
     }
 
     public void navigateToRegistrationFragment() {
@@ -88,6 +91,27 @@ public class MainActivity extends AppCompatActivity {
                         .replace(binding.fragmentContainer.getId(), registrationFragment)
                         .addToBackStack(null);
         transaction.commit();
+    }
 
+    public void navigateToToDoListFragment() {
+        ToDoListFragment toDoListFragment = new ToDoListFragment();
+
+        FragmentTransaction transaction =
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(binding.fragmentContainer.getId(), toDoListFragment)
+                        .addToBackStack(null);
+        transaction.commit();
+    }
+
+    public void navigateToAddToDoFragment() {
+        AddToDoFragment addToDoFragment = new AddToDoFragment();
+
+        FragmentTransaction transaction =
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(binding.fragmentContainer.getId(), addToDoFragment)
+                        .addToBackStack(null);
+        transaction.commit();
     }
 }

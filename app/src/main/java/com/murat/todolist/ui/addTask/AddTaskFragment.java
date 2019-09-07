@@ -1,6 +1,7 @@
 package com.murat.todolist.ui.addTask;
 
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 
@@ -12,8 +13,10 @@ import androidx.lifecycle.ViewModelProviders;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.murat.todolist.R;
 import com.murat.todolist.databinding.FragmentAddTaskBinding;
 
@@ -25,9 +28,20 @@ import java.util.GregorianCalendar;
  * A simple {@link Fragment} subclass.
  */
 public class AddTaskFragment extends Fragment {
+    private static final String ARG_TO_DO_ID = "toDoId";
 
     private FragmentAddTaskBinding binding;
     private AddTaskViewModel addTaskViewModel;
+
+    public static AddTaskFragment newInstance(int toDoId) {
+
+        Bundle args = new Bundle();
+        args.putInt(ARG_TO_DO_ID, toDoId);
+
+        AddTaskFragment fragment = new AddTaskFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     public AddTaskFragment() {
         // Required empty public constructor
@@ -47,20 +61,67 @@ public class AddTaskFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         addTaskViewModel = ViewModelProviders.of(this).get(AddTaskViewModel.class);
+        addTaskViewModel.setToDoId(getArguments().getInt(ARG_TO_DO_ID));
         binding.setLifecycleOwner(this);
         binding.setViewModel(addTaskViewModel);
+        observeAddTaskActionState(addTaskViewModel);
 
-        binding.ivDeadlineDate.setOnClickListener(v -> {
-            Calendar calendar = Calendar.getInstance();
-            DatePickerDialog datePickerDialog = new DatePickerDialog(
-                    getActivity(),
-                    dateSetListener,
-                    calendar.get(Calendar.YEAR),
-                    calendar.get(Calendar.MONTH),
-                    calendar.get(Calendar.DAY_OF_MONTH)
-            );
-            datePickerDialog.show();
+        binding.ivTaskDeadline.setOnClickListener(v -> buildDatePicker());
+    }
+
+    private void observeAddTaskActionState(AddTaskViewModel viewModel) {
+        viewModel.getAddTaskActionState().observe(getViewLifecycleOwner(), addTaskActionState -> {
+            switch (addTaskActionState) {
+                case SAVE_TASK_CLICK: {
+                    hideKeyboard();
+                    viewModel.checkTaskInputs();
+                    //viewModel.insertTask();
+                    break;
+                }
+                case INPUT_VALIDATION_SUCCESS: {
+                    //showSnackbar("Task input validation success.");
+                    viewModel.insertTask();
+                    break;
+                }
+                case INPUT_VALIDATION_FAIL: {
+                    showSnackbar("Task input validation fail.");
+                    break;
+                }
+                case TASK_CREATION_SUCCESS: {
+                    showSnackbar("Task creation success.");
+                    break;
+                }
+                case TASK_CREATION_FAIL: {
+                    showSnackbar("Task creation fail.");
+                    break;
+                }
+            }
         });
+    }
+
+    private void buildDatePicker() {
+        Calendar calendar = Calendar.getInstance();
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                getActivity(),
+                dateSetListener,
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+        );
+        datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
+        datePickerDialog.show();
+    }
+
+    private void showSnackbar(String message) {
+        Snackbar.make(binding.getRoot(), message, Snackbar.LENGTH_SHORT).show();
+    }
+
+    private void hideKeyboard() {
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(
+                getActivity().findViewById(android.R.id.content).getWindowToken(), 0
+        );
     }
 
     private DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
@@ -68,7 +129,7 @@ public class AddTaskFragment extends Fragment {
         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
             Calendar calendar = new GregorianCalendar(year, month, dayOfMonth);
             Date date = new Date(calendar.getTimeInMillis());
-            addTaskViewModel.taskDeadlineDate.setValue(date);
+            addTaskViewModel.getTaskDeadlineDate().set(date);
         }
     };
 }

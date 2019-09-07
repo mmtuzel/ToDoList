@@ -35,61 +35,97 @@
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.05"/>
 
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:maxHeight="?attr/actionBarSize"
+            android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
+            android:background="@color/colorPrimary"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+            android:id="@+id/til_task_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Task Name"
+            app:layout_constraintStart_toStartOf="@id/guideline_start"
+            app:layout_constraintEnd_toEndOf="@id/guideline_end"
+            app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_task_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+                android:text="@={viewModel.taskTitle}"
+                android:imeOptions="actionNext"
+                android:maxLines="1"
+                android:inputType="textCapWords"
+                tools:text="@tools:sample/full_names"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+            android:id="@+id/til_task_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Task Description"
+            app:layout_constraintStart_toStartOf="@id/guideline_start"
+            app:layout_constraintEnd_toEndOf="@id/guideline_end"
+            app:layout_constraintTop_toBottomOf="@id/til_task_name">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_task_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                android:text="@={viewModel.taskDescription}"
+                android:maxLines="5"
+                android:inputType="textMultiLine|textCapSentences"
+                android:imeOptions="actionDone"
+                tools:text="@tools:sample/lorem/random"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
         <ImageView
-            android:id="@+id/iv_deadline_date"
+            android:id="@+id/iv_task_deadline"
             android:layout_width="32dp"
             android:layout_height="32dp"
+            android:layout_marginTop="8dp"
+            android:background="?attr/actionBarItemBackground"
             app:layout_constraintStart_toStartOf="@id/guideline_start"
-            app:layout_constraintTop_toTopOf="@id/et_title"
-            app:layout_constraintBottom_toBottomOf="@id/et_title"
+            app:layout_constraintTop_toBottomOf="@id/til_task_description"
             app:srcCompat="@drawable/ic_date"/>
 
         <TextView
-            android:id="@+id/tv_deadline_date"
+            android:id="@+id/tv_task_deadline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:hint="Pick a deadline date"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
             android:setDate="@{viewModel.taskDeadlineDate}"
-            app:layout_constraintStart_toStartOf="@id/iv_deadline_date"
-            app:layout_constraintBottom_toTopOf="@id/iv_deadline_date"
+            app:layout_constraintStart_toEndOf="@id/iv_task_deadline"
+            app:layout_constraintTop_toTopOf="@id/iv_task_deadline"
+            app:layout_constraintBottom_toBottomOf="@id/iv_task_deadline"
             tools:text="@tools:sample/date/mmddyy"/>
-
-        <EditText
-            android:id="@+id/et_title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:hint="Title"
-            android:singleLine="true"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
-            android:text="@={viewModel.taskTitle}"
-            app:layout_constraintStart_toEndOf="@id/iv_deadline_date"
-            app:layout_constraintEnd_toEndOf="@id/guideline_end"
-            app:layout_constraintTop_toBottomOf="@id/guideline_top"
-            tools:text="@tools:sample/lorem/random"/>
-
-        <EditText
-            android:id="@+id/et_description"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:gravity="top"
-            android:hint="Enter your TO-DO here."
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-            android:text="@={viewModel.taskDescription}"
-            app:layout_constraintStart_toStartOf="@id/guideline_start"
-            app:layout_constraintEnd_toEndOf="@id/guideline_end"
-            app:layout_constraintTop_toBottomOf="@id/et_title"
-            app:layout_constraintBottom_toBottomOf="parent"
-            tools:text="@tools:sample/lorem/random[6]"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_save_task"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:onClick="@{() -> viewModel.createTask()}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="8dp"
+            android:onClick="@{() -> viewModel.clickSaveTask()}"
+            app:layout_constraintEnd_toStartOf="@id/guideline_end"
+            app:layout_constraintTop_toBottomOf="@id/til_task_description"
+            app:fabSize="mini"
             app:srcCompat="@drawable/ic_complete"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -92,7 +92,7 @@ public class RegistrationFragment extends Fragment {
                     break;
                 }
                 case USER_ID_SAVE_SUCCESS: {
-                    navigateToTask();
+                    navigateToToDoList();
                     //showSnackbar("USER HAS CREATED");
                     break;
                 }
@@ -124,7 +124,7 @@ public class RegistrationFragment extends Fragment {
         ((MainActivity) getActivity()).navigateToLoginFragment();
     }
 
-    private void navigateToTask() {
-        ((MainActivity) getActivity()).navigateToTaskFragment();
+    private void navigateToToDoList() {
+        ((MainActivity) getActivity()).navigateToToDoListFragment();
     }
 }

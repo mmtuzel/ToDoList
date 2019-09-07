@@ -1,10 +1,9 @@
-package com.murat.todolist.ui.login;
+package com.murat.todolist.ui.addToDo;
 
 
 import android.app.Activity;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
@@ -17,17 +16,16 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.murat.todolist.R;
-import com.murat.todolist.databinding.FragmentLoginBinding;
+import com.murat.todolist.databinding.FragmentAddToDoBinding;
 import com.murat.todolist.ui.MainActivity;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class LoginFragment extends Fragment {
-    private FragmentLoginBinding binding;
+public class AddToDoFragment extends Fragment {
+    private FragmentAddToDoBinding binding;
 
-
-    public LoginFragment() {
+    public AddToDoFragment() {
         // Required empty public constructor
     }
 
@@ -36,48 +34,42 @@ public class LoginFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_to_do, container, false);
         return binding.getRoot();
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        binding.btnGoSignUp.setOnClickListener(v -> navigateToRegistration());
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        LoginViewModel viewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
+        AddToDoViewModel viewModel = ViewModelProviders.of(this).get(AddToDoViewModel.class);
         binding.setViewModel(viewModel);
-        observeLoginActionStatus(viewModel);
+        observeAddTodoActionStatus(viewModel);
     }
 
-    private void observeLoginActionStatus(LoginViewModel viewModel) {
-        viewModel.getLoginActionStatus().observe(getViewLifecycleOwner(), loginActionStatus -> {
-            switch (loginActionStatus) {
-                case LOGIN_CLICK: {
+    private void observeAddTodoActionStatus(AddToDoViewModel viewModel) {
+        viewModel.getAddToDoActionStatus().observe(getViewLifecycleOwner(), addToDoActionStatus -> {
+            switch (addToDoActionStatus) {
+                case CLICK_NEXT: {
                     hideKeyboard();
-                    viewModel.checkInputsAreValid();
+                    viewModel.checkNameIsValid();
                     break;
                 }
                 case INPUT_VALIDATION_SUCCESS: {
-                    viewModel.checkUserCredentials();
+                    viewModel.insertToDo();
                     break;
                 }
                 case INPUT_VALIDATION_FAIL: {
-                    showSnackbar("Please provide proper user information.");
+                    showSnackbar("Please provide proper ToDo name.");
                     break;
                 }
-                case LOGIN_SUCCESS: {
-                    navigateToToDoList();
+                case TO_DO_CREATION_SUCCESS: {
+                    showSnackbar("ToDo creation success");
+                    navigateToAddTaskFragment(viewModel.getToDoId());
                     break;
                 }
-                case LOGIN_FAIL: {
-                    showSnackbar("There is no such user.");
+                case TO_DO_CREATION_FAIL: {
+                    showSnackbar("ToDo couldn't created.");
                     break;
                 }
                 default: {
@@ -100,11 +92,7 @@ public class LoginFragment extends Fragment {
         );
     }
 
-    private void navigateToRegistration() {
-        ((MainActivity) getActivity()).navigateToRegistrationFragment();
-    }
-
-    private void navigateToToDoList() {
-        ((MainActivity) getActivity()).navigateToToDoListFragment();
+    private void navigateToAddTaskFragment(int toDoId) {
+        ((MainActivity) getActivity()).navigateToAddTaskFragment(toDoId);
     }
 }

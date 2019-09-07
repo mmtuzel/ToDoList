@@ -33,10 +33,21 @@ import java.util.List;
  */
 public class TasksFragment extends Fragment {
     private static final String TAG = "TasksFragment";
+    private static final String ARG_TO_DO_ID = "toDoId";
 
     private FragmentTasksBinding binding;
     private TaskViewModel taskViewModel;
     private TaskAdapter taskAdapter;
+
+    public static TasksFragment newInstance(int toDoId) {
+
+        Bundle args = new Bundle();
+        args.putInt(ARG_TO_DO_ID, toDoId);
+
+        TasksFragment fragment = new TasksFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     public TasksFragment() {
         // Required empty public constructor
@@ -87,16 +98,16 @@ public class TasksFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         taskViewModel = ViewModelProviders.of(this).get(TaskViewModel.class);
+        taskViewModel.setToDoId(getArguments().getInt(ARG_TO_DO_ID));
         taskViewModel.setTaskFilterType(TaskFilterType.All_TASK);
-        subscribeTasks(taskViewModel.getTasks());
+        observeTasks(taskViewModel);
 
         binding.fabAddTask.setOnClickListener(v ->
-                ((MainActivity) getActivity()).navigateToAddTaskFragment());
+                ((MainActivity) getActivity()).navigateToAddTaskFragment(getArguments().getInt(ARG_TO_DO_ID)));
     }
 
-    private void subscribeTasks(LiveData<List<Task>> liveData) {
-        liveData.removeObservers(this); // workaround for improper navigation and fragment handling. will be fixed.
-        liveData.observe(this, tasks -> {
+    private void observeTasks(TaskViewModel viewModel) {
+        viewModel.getTasks().observe(getViewLifecycleOwner(), tasks -> {
             Log.d(TAG, "tasks size: " + tasks.size());
             taskAdapter.submitList(tasks);
             taskAdapter.setTasks(tasks);
@@ -180,7 +191,8 @@ public class TasksFragment extends Fragment {
     private TaskClickCallback clickCallback = new TaskClickCallback() {
         @Override
         public void onTaskClick(Task task) {
-            ((MainActivity) getActivity()).navigateToTaskDetailFragment(task.getId());
+            // TODO fix editing a task
+            //((MainActivity) getActivity()).navigateToTaskDetailFragment(task.getId());
         }
 
         @Override
@@ -191,9 +203,9 @@ public class TasksFragment extends Fragment {
         @Override
         public void onTaskStatusChangeClick(Task task) {
             if (task.getStatus() == Status.ACTIVE) {
-                taskViewModel.completeTask(task);
+                taskViewModel.completeTask(task.getId());
             } else if (task.getStatus() == Status.COMPLETED) {
-                taskViewModel.activateTask(task);
+                taskViewModel.activateTask(task.getId());
             }
         }
     };

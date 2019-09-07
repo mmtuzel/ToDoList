@@ -12,6 +12,7 @@ public class Task {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
+    private int toDoId;
     private String title;
     private String description;
     private Date createdAt;
@@ -22,7 +23,7 @@ public class Task {
     public Task() {
 
     }
-
+    // no need for constructors
     @Ignore
     public Task(String title, String description, Date createdAt, Date deadline, Status status) {
         this.title = title;
@@ -47,6 +48,14 @@ public class Task {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getToDoId() {
+        return toDoId;
+    }
+
+    public void setToDoId(int toDoId) {
+        this.toDoId = toDoId;
     }
 
     public String getTitle() {

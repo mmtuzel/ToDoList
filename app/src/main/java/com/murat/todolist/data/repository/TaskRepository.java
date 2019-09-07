@@ -12,135 +12,77 @@ import com.murat.todolist.data.entity.Task;
 
 import java.util.List;
 
+import io.reactivex.Completable;
+
 public class TaskRepository {
-    private static final String TAG = "TaskRepository";
-
     private TaskDao taskDao;
-
-    private LiveData<List<Task>> tasks;
 
     public TaskRepository(Application application) {
         ToDoDatabase database = ToDoDatabase.getDatabase(application);
         taskDao = database.taskDao();
-        tasks = taskDao.getTasks();
     }
 
-    public LiveData<List<Task>> getTasks() {
-        return tasks;
+    public LiveData<List<Task>> getTasks(int toDoId) {
+        return taskDao.getTasks(toDoId);
     }
 
-    public LiveData<List<Task>> getTasksByStatus(Status status) {
-        return taskDao.getTasksByStatus(status);
+    public LiveData<List<Task>> getTasksByStatus(int toDoId, Status status) {
+        return taskDao.getTasksByStatus(toDoId, status);
     }
 
-    public LiveData<List<Task>> getTasksByNameASC() {
-        return taskDao.getTasksByNameASC();
+    public LiveData<List<Task>> getTasksByNameASC(int toDoId) {
+        return taskDao.getTasksByNameASC(toDoId);
     }
 
-    public LiveData<List<Task>> getTasksByNameDESC() {
-        return taskDao.getTasksByNameDESC();
+    public LiveData<List<Task>> getTasksByNameDESC(int toDoId) {
+        return taskDao.getTasksByNameDESC(toDoId);
     }
 
-    public LiveData<List<Task>> getTaskByCreateDateASC() {
-        return taskDao.getTasksByCreateDateASC();
+    public LiveData<List<Task>> getTasksByCreateDateASC(int toDoId) {
+        return taskDao.getTasksByCreateDateASC(toDoId);
     }
 
-    public LiveData<List<Task>> getTaskByCreateDateDESC() {
-        return taskDao.getTasksByCreateDateDESC();
+    public LiveData<List<Task>> getTasksByCreateDateDESC(int toDoId) {
+        return taskDao.getTasksByCreateDateDESC(toDoId);
     }
 
-    public LiveData<List<Task>> getTaskByDeadlineDateASC() {
-        return taskDao.getTasksByDeadlineDateASC();
+    public LiveData<List<Task>> getTasksByDeadlineDateASC(int toDoId) {
+        return taskDao.getTasksByDeadlineDateASC(toDoId);
     }
 
-    public LiveData<List<Task>> getTaskByDeadlineDateDESC() {
-        return taskDao.getTasksByDeadlineDateDESC();
+    public LiveData<List<Task>> getTasksByDeadlineDateDESC(int toDoId) {
+        return taskDao.getTasksByDeadlineDateDESC(toDoId);
     }
 
-    public LiveData<List<Task>> getTasksByStatusOrderASC() {
-        return taskDao.getTasksByStatusOrderASC();
+    public LiveData<List<Task>> getTasksByStatusOrderASC(int toDoId) {
+        return taskDao.getTasksByStatusOrderASC(toDoId);
     }
 
-    public LiveData<List<Task>> getTasksByStatusOrderDESC() {
-        return taskDao.getTasksByStatusOrderDESC();
+    public LiveData<List<Task>> getTasksByStatusOrderDESC(int toDoId) {
+        return taskDao.getTasksByStatusOrderDESC(toDoId);
     }
 
-    public void insertTask(Task task) {
-        new InsertTodoTask(taskDao).execute(task);
+    public Completable insertTask(Task task) {
+        return taskDao.insertTask(task);
     }
 
-    public void updateTask(Task task) {
-        new UpdateTodoTask(taskDao).execute(task);
+    public Completable updateTask(Task task) {
+        return taskDao.updateTask(task);
     }
 
-    public void deleteTask(Task task) {
-        new DeleteTodoTask(taskDao).execute(task);
+    public Completable deleteTask(Task task) {
+        return taskDao.deleteTask(task);
     }
 
     public LiveData<Task> getTask(int id) {
         return taskDao.getTask(id);
     }
 
-    public void updateTaskStatus(Task task, Status status) {
-        new UpdateTodoTaskStatus(taskDao, status).execute(task);
+    public Completable updateTaskStatus(int taskId, Status status) {
+        return taskDao.updateTaskStatus(taskId, status);
     }
 
-    private static class InsertTodoTask extends AsyncTask<Task, Void, Void> {
-        private TaskDao taskDao;
-
-        InsertTodoTask(TaskDao taskDao) {
-            this.taskDao = taskDao;
-        }
-
-        @Override
-        protected Void doInBackground(Task... tasks) {
-            taskDao.insertTask(tasks[0]);
-            return null;
-        }
+    public Completable deleteTasksByToDoId(int toDoId) {
+        return taskDao.deleteTasksByToDoId(toDoId);
     }
-
-    private static class UpdateTodoTask extends AsyncTask<Task, Void, Void> {
-        private TaskDao taskDao;
-
-        UpdateTodoTask(TaskDao taskDao) {
-            this.taskDao = taskDao;
-        }
-
-        @Override
-        protected Void doInBackground(Task... tasks) {
-            taskDao.updateTask(tasks[0]);
-            return null;
-        }
-    }
-
-    private static class DeleteTodoTask extends AsyncTask<Task, Void, Void> {
-        private TaskDao taskDao;
-
-        DeleteTodoTask(TaskDao taskDao) {
-            this.taskDao = taskDao;
-        }
-
-        @Override
-        protected Void doInBackground(Task... tasks) {
-            taskDao.deleteTask(tasks[0]);
-            return null;
-        }
-    }
-
-    private static class UpdateTodoTaskStatus extends AsyncTask<Task, Void, Void> {
-        private TaskDao taskDao;
-        private com.murat.todolist.data.entity.Status status;
-
-        UpdateTodoTaskStatus(TaskDao taskDao, com.murat.todolist.data.entity.Status status) {
-            this.taskDao = taskDao;
-            this.status = status;
-        }
-
-        @Override
-        protected Void doInBackground(Task... tasks) {
-            taskDao.updateTaskStatus(tasks[0].getId(), status);
-            return null;
-        }
-    }
-
 }

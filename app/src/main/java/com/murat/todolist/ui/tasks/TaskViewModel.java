@@ -15,70 +15,95 @@ import com.murat.todolist.data.repository.TaskRepository;
 
 import java.util.List;
 
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
+
 public class TaskViewModel extends AndroidViewModel {
+    private static final String TAG = "TaskViewModel";
+
     private TaskRepository repository;
-    private LiveData<List<Task>> tasks;
     private MutableLiveData<TaskFilterType> taskFilterType = new MutableLiveData<>();
+    private CompositeDisposable disposable = new CompositeDisposable();
+
+    private int toDoId;
 
     public TaskViewModel(@NonNull Application application) {
         super(application);
         repository = new TaskRepository(application);
-        tasks = Transformations.switchMap(taskFilterType, input -> {
-            if (input.equals(TaskFilterType.All_TASK)) {
-                return repository.getTasks();
-            } else if (input.equals(TaskFilterType.ACTIVE_TASKS)) {
-                return repository.getTasksByStatus(Status.ACTIVE);
-            } else if (input.equals(TaskFilterType.COMPLETED_TASKS)) {
-                return repository.getTasksByStatus(Status.COMPLETED);
-            } else if (input.equals(TaskFilterType.EXPIRED_TASKS)) {
-                return repository.getTasksByStatus(Status.EXPIRED);
-            } else if (input.equals(TaskFilterType.ORDER_BY_NAME_ASC_TASKS)) {
-                return repository.getTasksByNameASC();
-            } else if (input.equals(TaskFilterType.ORDER_BY_NAME_DESC_TASKS)) {
-                return repository.getTasksByNameDESC();
-            } else if (input.equals(TaskFilterType.ORDER_BY_CREATE_DATE_ASC_TASKS)) {
-                return repository.getTaskByCreateDateASC();
-            } else if (input.equals(TaskFilterType.ORDER_BY_CREATE_DATE_DESC_TASKS)) {
-                return repository.getTaskByCreateDateDESC();
-            } else if (input.equals(TaskFilterType.ORDER_BY_DEADLINE_DATE_ASC_TASKS)) {
-                return  repository.getTaskByDeadlineDateASC();
-            } else if (input.equals(TaskFilterType.ORDER_BY_DEADLINE_DATE_DESC_TASKS)) {
-                return  repository.getTaskByDeadlineDateDESC();
-            } else if (input.equals(TaskFilterType.ORDER_BY_STATUS_ASC_TASKS)) {
-                return  repository.getTasksByStatusOrderASC();
-            } else if (input.equals(TaskFilterType.ORDER_BY_STATUS_DESC_TASKS)) {
-                return  repository.getTasksByStatusOrderDESC();
-            }
-            return null;
-        });
+    }
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        disposable.clear();
+    }
+
+    public void setToDoId(int toDoId) {
+        this.toDoId = toDoId;
     }
 
     public void deleteTask(Task task) {
-        repository.deleteTask(task);
+        disposable.add(
+                repository.deleteTask(task)
+                .subscribeOn(Schedulers.io())
+                .subscribe(
+                        () -> Log.d(TAG, "deleteTask success"),
+                        throwable -> Log.d(TAG, "deleteTask fail")
+                )
+        );
     }
 
-    public void updateTaskStatus(Task task) {
-        /*if (task.getStatus() == Status.ACTIVE) {
-            task.setStatus(Status.COMPLETED);
-        } else if (task.getStatus() == Status.COMPLETED) {
-            task.setStatus(Status.ACTIVE);
-        }*/
-        repository.updateTask(task);
-        Log.d("TaskViewModel", "task updated");
+    public void completeTask(int taskId) {
+        disposable.add(
+                repository.updateTaskStatus(taskId, Status.COMPLETED)
+                .subscribeOn(Schedulers.io())
+                .subscribe(
+                        () -> Log.d(TAG, "complete task success"),
+                        throwable -> Log.d(TAG, "complete task error")
+                )
+        );
     }
 
-    public void completeTask(Task task) {
-        //task.setStatus(Status.COMPLETED);
-        repository.updateTaskStatus(task, Status.COMPLETED);
-    }
-
-    public void activateTask(Task task) {
-        //task.setStatus(Status.ACTIVE);
-        repository.updateTaskStatus(task, Status.ACTIVE);
+    public void activateTask(int taskId) {
+        disposable.add(
+                repository.updateTaskStatus(taskId, Status.ACTIVE)
+                        .subscribeOn(Schedulers.io())
+                        .subscribe(
+                                () -> Log.d(TAG, "active task success"),
+                                throwable -> Log.d(TAG, "active task error")
+                        )
+        );
     }
 
     public LiveData<List<Task>> getTasks() {
-        return tasks;
+        return Transformations.switchMap(taskFilterType, input -> {
+            if (input.equals(TaskFilterType.All_TASK)) {
+                return repository.getTasks(toDoId);
+            } else if (input.equals(TaskFilterType.ACTIVE_TASKS)) {
+                return repository.getTasksByStatus(toDoId, Status.ACTIVE);
+            } else if (input.equals(TaskFilterType.COMPLETED_TASKS)) {
+                return repository.getTasksByStatus(toDoId, Status.COMPLETED);
+            } else if (input.equals(TaskFilterType.EXPIRED_TASKS)) {
+                return repository.getTasksByStatus(toDoId, Status.EXPIRED);
+            } else if (input.equals(TaskFilterType.ORDER_BY_NAME_ASC_TASKS)) {
+                return repository.getTasksByNameASC(toDoId);
+            } else if (input.equals(TaskFilterType.ORDER_BY_NAME_DESC_TASKS)) {
+                return repository.getTasksByNameDESC(toDoId);
+            } else if (input.equals(TaskFilterType.ORDER_BY_CREATE_DATE_ASC_TASKS)) {
+                return repository.getTasksByCreateDateASC(toDoId);
+            } else if (input.equals(TaskFilterType.ORDER_BY_CREATE_DATE_DESC_TASKS)) {
+                return repository.getTasksByCreateDateDESC(toDoId);
+            } else if (input.equals(TaskFilterType.ORDER_BY_DEADLINE_DATE_ASC_TASKS)) {
+                return  repository.getTasksByDeadlineDateASC(toDoId);
+            } else if (input.equals(TaskFilterType.ORDER_BY_DEADLINE_DATE_DESC_TASKS)) {
+                return  repository.getTasksByDeadlineDateDESC(toDoId);
+            } else if (input.equals(TaskFilterType.ORDER_BY_STATUS_ASC_TASKS)) {
+                return  repository.getTasksByStatusOrderASC(toDoId);
+            } else if (input.equals(TaskFilterType.ORDER_BY_STATUS_DESC_TASKS)) {
+                return  repository.getTasksByStatusOrderDESC(toDoId);
+            }
+            return null;
+        });
     }
 
     public void setTaskFilterType(TaskFilterType type) {
