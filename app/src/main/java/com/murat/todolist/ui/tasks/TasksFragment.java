@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -102,8 +103,7 @@ public class TasksFragment extends Fragment {
         taskViewModel.setTaskFilterType(TaskFilterType.All_TASK);
         observeTasks(taskViewModel);
 
-        binding.fabAddTask.setOnClickListener(v ->
-                ((MainActivity) getActivity()).navigateToAddTaskFragment(getArguments().getInt(ARG_TO_DO_ID)));
+        binding.fabAddTask.setOnClickListener(v -> navigateToAddTaskFragment(getArguments().getInt(ARG_TO_DO_ID)));
     }
 
     private void observeTasks(TaskViewModel viewModel) {
@@ -186,6 +186,15 @@ public class TasksFragment extends Fragment {
             }
             return false;
         });
+    }
+
+    private void navigateToAddTaskFragment(int toDoId) {
+        Bundle bundle = new Bundle();
+        bundle.putInt("toDoId", toDoId);
+        NavHostFragment.findNavController(this).navigate(
+                R.id.action_tasksFragment_to_addTaskFragment,
+                bundle
+        );
     }
 
     private TaskClickCallback clickCallback = new TaskClickCallback() {

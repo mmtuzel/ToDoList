@@ -7,6 +7,8 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,11 +61,16 @@ public class ToDoListFragment extends Fragment {
     }
 
     private void navigateToAddToDoFragment() {
-        ((MainActivity) getActivity()).navigateToAddToDoFragment();
+        NavHostFragment.findNavController(this).navigate(R.id.action_toDoListFragment_to_addToDoFragment);
     }
 
     private void navigateToTasksFragment(int toDoId) {
-        ((MainActivity) getActivity()).navigateToTasksFragment(toDoId);
+        Bundle bundle = new Bundle();
+        bundle.putInt("toDoId", toDoId);
+        NavHostFragment.findNavController(this).navigate(
+                R.id.action_toDoListFragment_to_tasksFragment,
+                bundle
+        );
     }
 
     private ToDoClickCallback clickCallback = new ToDoClickCallback() {

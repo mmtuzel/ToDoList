@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -89,6 +90,7 @@ public class AddTaskFragment extends Fragment {
                 }
                 case TASK_CREATION_SUCCESS: {
                     showSnackbar("Task creation success.");
+                    navigateToTasksFragment(getArguments().getInt(ARG_TO_DO_ID));
                     break;
                 }
                 case TASK_CREATION_FAIL: {
@@ -121,6 +123,15 @@ public class AddTaskFragment extends Fragment {
                 (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(
                 getActivity().findViewById(android.R.id.content).getWindowToken(), 0
+        );
+    }
+
+    private void navigateToTasksFragment(int toDoId) {
+        Bundle bundle = new Bundle();
+        bundle.putInt("toDoId", toDoId);
+        NavHostFragment.findNavController(this).navigate(
+                R.id.action_addTaskFragment_to_tasksFragment,
+                bundle
         );
     }
 

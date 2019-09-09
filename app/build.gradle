@@ -31,6 +31,7 @@ ext {
     materialVersion = '1.0.0'
     rxJavaVersion = '2.2.12'
     rxAndroidVersion = '2.1.1'
+    navigationVersion = "2.1.0"
 }
 
 dependencies {
@@ -52,4 +53,7 @@ dependencies {
 
     implementation "io.reactivex.rxjava2:rxjava:${rxJavaVersion}"
     implementation "io.reactivex.rxjava2:rxandroid:${rxAndroidVersion}"
+
+    implementation "androidx.navigation:navigation-fragment:${navigationVersion}"
+    implementation "androidx.navigation:navigation-ui:${navigationVersion}"
 }

@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -121,10 +122,10 @@ public class RegistrationFragment extends Fragment {
     }
 
     private void navigateToLogin() {
-        ((MainActivity) getActivity()).navigateToLoginFragment();
+        NavHostFragment.findNavController(this).navigate(R.id.action_registrationFragment_to_loginFragment);
     }
 
     private void navigateToToDoList() {
-        ((MainActivity) getActivity()).navigateToToDoListFragment();
+        NavHostFragment.findNavController(this).navigate(R.id.action_registrationFragment_to_toDoListFragment);
     }
 }
